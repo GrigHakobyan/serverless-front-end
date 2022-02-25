@@ -17,12 +17,21 @@ const Registration = () => {
 
 
     return (
-        <div>
-            <p>{error}</p>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/><br/>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/><br/>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/><br/>
-            <button onClick={onRegistrationHandler}>Registration</button>
+        <div className='content'>
+            <h1>Registration</h1>
+
+            <p className='error'>{error}</p>
+
+            <label>Username</label>
+            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
+
+            <label>Email</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+
+            <label>Password</label>
+            <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+
+            <button className='btn btn-success' onClick={onRegistrationHandler}>Registration</button>
         </div>
     );
 };

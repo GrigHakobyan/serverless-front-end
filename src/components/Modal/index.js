@@ -30,7 +30,7 @@ const Modal = ({show,header, error, close, children}) => {
                     padding: "10px"
                 }}>
                     <div>{header}</div>
-                    <div className='btn' onClick={close}>X</div>
+                    <div className='btn btn-error' onClick={close}>X</div>
                 </div>
                 <hr style={{
                     marginTop: "10px"

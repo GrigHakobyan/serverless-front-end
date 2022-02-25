@@ -12,10 +12,14 @@ const Users = () => {
     }, [])
 
     return (
-        <div>
-            <p>{error}</p>
+        <div className='list'>
+            <h2 style={{margin: 'auto'}}>Users</h2>
+            <h2 className='error'>{error}</h2>
             {
-                users && users.map(user => <div key={user.userId}>
+                users && users.map(user => <div
+                    className='list-item'
+                    key={user.userId}
+                >
                     <Link to={`/user/${user.userId}`}>{user.username}</Link>
                 </div>)
             }

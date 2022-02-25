@@ -27,14 +27,19 @@ const Profile = () => {
 
 
     return (
-        <div>
-            <p>{error}</p>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/><br/>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/><br/>
-            <input placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} type="text"/><br/>
-            <button onClick={onSaveHandler}>Save</button>
+        <div className='content'>
+            <h2>Profile</h2>
 
-            <button onClick={onDeleteHandler}>Delete profile</button>
+            <p className='error'>{error}</p>
+
+            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+
+            <input placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+
+            <button style={{marginBottom: '8px'}} className='btn btn-success' onClick={onSaveHandler}>Save</button>
+
+            <button className='btn btn-alert' onClick={onDeleteHandler}>Delete profile</button>
         </div>
     );
 };

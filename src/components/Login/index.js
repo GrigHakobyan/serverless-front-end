@@ -14,15 +14,19 @@ const Login = () => {
         dispatch(login(username, password))
     }
 
-
     return (
-        <div>
-            <p>{error}</p>
+        <div className='content'>
+            <h1>Login</h1>
+
+            <p className='error'>{error}</p>
+
+            <label>Username</label>
             <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
-            <br/>
+
+            <label>Password</label>
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
-            <br/>
-            <button onClick={onLoginHandler}>Login</button>
+
+            <button className='btn btn-success' onClick={onLoginHandler}>Login</button>
         </div>
     );
 };

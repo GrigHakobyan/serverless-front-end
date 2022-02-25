@@ -24,18 +24,20 @@ const User = () => {
 
 
     return (
-        <div>
+        <div className='content'>
             {
                 error ?
-                        <p>{error}</p>
+                        <p className='error'>{error}</p>
                     :
                     findUser ?
                         <>
+                            <h2>{findUser.username}</h2>
                             <p>{findUser.username}</p>
                             <p>{findUser.email}</p>
                         </>
                         :
                         <>
+                            <h2>{findUser.username}</h2>
                             <p>{user.username}</p>
                             <p>{user.email}</p>
                         </>

@@ -12,10 +12,14 @@ const Cars = () => {
     }, [])
 
     return (
-        <div>
-            <p>{error}</p>
+        <div className='list'>
+            <h2 style={{margin: 'auto'}}>Cars</h2>
+            <h2 className='error'>{error}</h2>
             {
-                cars && cars.map(car => <div key={car.id}>
+                cars && cars.map(car => <div
+                    className='list-item'
+                    key={car.id}
+                >
                     <Link to={`/car/${car.id}`}>{car.carName} - {car.carModel}</Link>
                 </div>)
             }

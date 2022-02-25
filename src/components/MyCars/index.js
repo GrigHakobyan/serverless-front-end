@@ -76,15 +76,22 @@ const MyCars = () => {
 
     return (
         <div>
-            <button onClick={toggleCreateModal}>Add new car</button>
-            <div onClick={onDeleteHandler}>
+            <div className='list' onClick={onDeleteHandler}>
+                <h2 style={{margin: '8px auto' }}>My Cars</h2>
+
                 {
-                    myCars && myCars.map(car => <div data-id={car.id} key={car.id}>
-                        <Link to={`/car/${car.id}`}>{car.carName} - {car.carModel}</Link>
-                        <button name='delete'>Delete</button>
-                        <button onClick={showUpdateModal}>Update</button>
+                    myCars && myCars.map(car => <div
+                        className='list-item'
+                        data-id={car.id}
+                        key={car.id}
+                    >
+                        <Link className='item' to={`/car/${car.id}`}>{car.carName} - {car.carModel}</Link>
+                        <button className='btn btn-alert item' name='delete'>Delete</button>
+                        <button className='btn btn-success item' onClick={showUpdateModal}>Update</button>
                     </div>)
                 }
+
+                <button className='btn btn-success' onClick={toggleCreateModal}>Add new car</button>
             </div>
 
 

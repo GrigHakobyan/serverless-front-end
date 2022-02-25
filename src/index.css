@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+
 header {
   display: flex;
   flex-direction: row;
@@ -33,8 +34,30 @@ main {
 
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   margin: auto;
+}
+
+
+input {
+  height: 30px;
+  width: 300px;
+
+  font-size: 24px;
+}
+
+label {
+  font-size: 22px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content > * + *{
+  margin-bottom: 8px;
 }
 
 
@@ -53,21 +76,69 @@ main {
   color: rgba(38, 38, 38, 0.7);
 }
 
-
 .btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  cursor: pointer;
+}
 
+.btn-error {
   min-height: 30px;
   min-width: 30px;
-
-  cursor: pointer;
 
   border: 1px red solid;
   border-radius: 10%;
 
   background: red;
   color: black;
+}
 
+.btn-success {
+  margin: auto;
+  background: #04bd04;
+
+  padding: 5px;
+
+  border: 1px solid black;
+
+  font-size: 25px;
+
+}
+
+.btn-success:hover {
+  background: rgb(1, 150, 1);
+}
+
+.error {
+  color: red;
+}
+
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.list-item {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.list-item > a {
+  text-decoration: none;
+  color: #2922e7;
+}
+
+.list-item > a:hover {
+  color: #0b076b;
+}
+
+.btn-alert {
+  font-size: 25px;
+  background: #b20202;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.item {
+  margin: 8px;
 }

@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import {useDispatch, useSelector} from "react-redux";
-import {Routes, Route, Navigate} from "react-router-dom";
+import {Routes, Route, Navigate, Redirect} from "react-router-dom";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Users from "./components/Users";
@@ -39,9 +39,10 @@ function App() {
                             <Route path='/myCars' element={<MyCars />} />
                             <Route path='/car/:carId' element={<Car />} />
                             <Route path='/profile' element={<Profile />} />
-                            <Route path='*' element={ <Navigate to={ isAuth ? '/' : '/login'}/> } />
                         </>
+
                     }
+                    <Route path='*' element={ <Navigate to={ isAuth ? '/' : '/login'}/> } />
                 </Routes>
             </main>
         </div>

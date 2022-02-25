@@ -24,18 +24,20 @@ const Car = () => {
     }, [])
 
     return (
-        <div>
+        <div className='content'>
             {
                 error ?
                         <p>{error}</p>
                     :
                     findCar ?
                         <>
+                            <h2>{findCar.carName}</h2>
                             <p>{findCar.carName}</p>
                             <p>{findCar.carModel}</p>
                         </>
                         :
                         <>
+                            <h2>{findCar.carName}</h2>
                             <p>{car.carName}</p>
                             <p>{car.carModel}</p>
                         </>
