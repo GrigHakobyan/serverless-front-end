@@ -1,0 +1,73 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  padding: 10px;
+  border-bottom: 1px solid;
+
+  margin-bottom: 10px;
+}
+
+header > a {
+  font-size: 22px;
+  text-decoration: none;
+  color: #000;
+}
+
+header > a:hover {
+  color: rgba(38, 38, 38, 0.7);
+}
+
+
+main {
+  width: 80%;
+  height: calc(100vh - 58px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+
+
+.logout {
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #000;
+
+  font-family: "Liberation Serif";
+}
+
+.logout:hover {
+  color: rgba(38, 38, 38, 0.7);
+}
+
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 30px;
+  min-width: 30px;
+
+  cursor: pointer;
+
+  border: 1px red solid;
+  border-radius: 10%;
+
+  background: red;
+  color: black;
+
+}
