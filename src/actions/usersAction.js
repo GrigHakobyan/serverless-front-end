@@ -76,10 +76,18 @@ export const updateUserPassword = (oldPassword, newPassword) => {
 }
 
 
-export const deleteProfile = () => {
+export const deleteProfile = (myCars) => {
     return async dispatch => {
         try {
             const user = UserPool.getCurrentUser()
+
+            const carsId = myCars.map(car => car.id)
+
+            await request.delete('/deleteCars',{
+                data: {
+                    carsId: carsId
+                }
+            })
 
             user.getSession((error, session) => {
                 user.deleteUser((err, result) => {

@@ -10,6 +10,7 @@ const Profile = () => {
 
     const dispatch = useDispatch()
     const error = useSelector(state => state.usersReducer.error)
+    const myCars = useSelector(state => state.carsReducer.myCars)
 
     const navigate = useNavigate()
 
@@ -24,7 +25,7 @@ const Profile = () => {
     }
 
     const onDeleteHandler = () => {
-        dispatch(deleteProfile())
+        dispatch(deleteProfile(myCars))
         navigate('/login')
     }
 
