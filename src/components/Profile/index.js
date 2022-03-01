@@ -1,28 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {deleteProfile, getProfile, updateUser} from "../../actions/usersAction";
+import {deleteProfile, getProfile, updateUserPassword} from "../../actions/usersAction";
+import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
-    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
 
     const dispatch = useDispatch()
     const error = useSelector(state => state.usersReducer.error)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
-        getProfile().then(data => {
-            setUsername(data.username)
-            setEmail(data.email)
+        getProfile().then(email => {
+            setEmail(email)
         })
     }, [])
 
     const onSaveHandler = () => {
-        dispatch(updateUser(username, email, password))
+        dispatch(updateUserPassword(password, newPassword))
     }
 
     const onDeleteHandler = () => {
         dispatch(deleteProfile())
+        navigate('/login')
     }
 
 
@@ -32,10 +35,10 @@ const Profile = () => {
 
             <p className='error'>{error}</p>
 
-            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+            <input disabled value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
 
-            <input placeholder='********' value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+            <input placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+            <input placeholder='New password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} type="text"/>
 
             <button style={{marginBottom: '8px'}} className='btn btn-success' onClick={onSaveHandler}>Save</button>
 

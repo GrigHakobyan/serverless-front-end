@@ -1,17 +1,29 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 
 import {login} from "../../actions/authAction";
+import {Link, useNavigate} from "react-router-dom";
+import {setError} from "../../reducers/authReducer";
 
 const Login = () => {
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
-    const {error} = useSelector(state => state.authReducer)
+    const {error, isAuth} = useSelector(state => state.authReducer)
+
+    const navigate = useNavigate()
 
     const onLoginHandler = () => {
-        dispatch(login(username, password))
+        dispatch(login(email, password))
+    }
+
+    useEffect(() => {
+        dispatch(setError(''))
+    }, [])
+
+    if(isAuth) {
+        navigate('/')
     }
 
     return (
@@ -20,13 +32,19 @@ const Login = () => {
 
             <p className='error'>{error}</p>
 
-            <label>Username</label>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
+            <label>Email</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
 
             <label>Password</label>
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
 
-            <button className='btn btn-success' onClick={onLoginHandler}>Login</button>
+            <div className='flex-row'>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <Link to='/forgotpassword'>Forgot password?</Link>
+                    <Link to='/registration'>Registration</Link>
+                </div>
+                <button className='btn auth-btn' onClick={onLoginHandler}>Login</button>
+            </div>
         </div>
     );
 };

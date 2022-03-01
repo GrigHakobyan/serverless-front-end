@@ -11,6 +11,9 @@ import MyCars from "./components/MyCars";
 import Car from "./components/Car";
 import {useEffect} from "react";
 import {check} from "./actions/authAction";
+import UserPool from "./helpers/cognito/userPool";
+import {setAuth} from "./reducers/authReducer";
+import ForgotPassword from "./components/ForgotPassword";
 
 function App() {
     const {isAuth} = useSelector(state => state.authReducer)
@@ -30,6 +33,7 @@ function App() {
                         <>
                             <Route path='/login' element={ <Login /> }/>
                             <Route path='/registration' element={ <Registration /> }/>
+                            <Route path='/forgotpassword' element={<ForgotPassword />} />
                         </>
                         :
                         <>
@@ -39,10 +43,9 @@ function App() {
                             <Route path='/myCars' element={<MyCars />} />
                             <Route path='/car/:carId' element={<Car />} />
                             <Route path='/profile' element={<Profile />} />
+                            <Route path='*' element={ <Navigate to={'/'}/> } />
                         </>
-
                     }
-                    <Route path='*' element={ <Navigate to={ isAuth ? '/' : '/login'}/> } />
                 </Routes>
             </main>
         </div>

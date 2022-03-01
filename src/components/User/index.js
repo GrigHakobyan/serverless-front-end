@@ -12,7 +12,7 @@ const User = () => {
     const {error, user, users} = useSelector(state => state.usersReducer)
 
     useEffect(() => {
-        const foundUser = users?.find(user => user.userId === userId)
+        const foundUser = users?.find(user => user.Username === userId)
 
         if(foundUser) {
             setFindUser(foundUser)
@@ -31,15 +31,11 @@ const User = () => {
                     :
                     findUser ?
                         <>
-                            <h2>{findUser.username}</h2>
-                            <p>{findUser.username}</p>
-                            <p>{findUser.email}</p>
+                            <h2>{findUser?.Attributes[1].Value}</h2>
                         </>
                         :
                         <>
-                            <h2>{findUser.username}</h2>
-                            <p>{user.username}</p>
-                            <p>{user.email}</p>
+                        <h2>{user && user?.Attributes?.[2].Value}</h2>
                         </>
             }
         </div>

@@ -37,7 +37,7 @@ const Car = () => {
                         </>
                         :
                         <>
-                            <h2>{findCar.carName}</h2>
+                            <h2>{car.carName}</h2>
                             <p>{car.carName}</p>
                             <p>{car.carModel}</p>
                         </>

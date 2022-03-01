@@ -1,78 +1,119 @@
-import request from "../helpers/axios";
 import {setAuth, setError} from "../reducers/authReducer";
 import {removeAllCars} from "../reducers/carsReducer";
 import {removeAllUsers} from "../reducers/usersReducer";
+import UserPool from "../helpers/cognito/userPool";
+import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
 
 
-export const login = (username, password) => {
+export const login = (email, password) => {
     return async dispatch => {
-        try {
-            const response = await request.post('/login',{
-                username,
-                password
+        dispatch(setError(''))
+
+            const user = new CognitoUser({
+                Username: email,
+                Pool: UserPool
             })
 
-            const token = response.data.token
+            const authDetails = new AuthenticationDetails({
+                Username: email,
+                Password: password
+            })
 
-            dispatch(setAuth(true))
-            dispatch(setError(''))
-            localStorage.setItem('token', token)
+            user.authenticateUser(authDetails,{
+                onSuccess: (data) => {
+                    console.log(data)
+                    dispatch(setError(''))
+                    dispatch(setAuth(true))
+                },
+                onFailure: (err) => {
+                    if(err) {
+                        console.log(err.message)
+                        dispatch(setError(err.message))
+                    } else {
+                        dispatch(setError(''))
+                    }
+                },
+                newPasswordRequired: (data) => {
+                    console.log('New password required', data)
+                    dispatch(setError(''))
+                    dispatch(setAuth(true))
+                }
+            })
 
-        } catch (e) {
-            dispatch(setError(e.response.data.error))
-        }
     }
 }
 
 
-export const registration = (username, email, password) => {
+export const registration = (email, password) => {
     return async dispatch => {
-        try {
-            const response = await request.post('/registration',{
-                username,
-                email,
-                password
-            })
 
-            const token = response.data.token
-
-            dispatch(setAuth(true))
-            dispatch(setError(''))
-            localStorage.setItem('token', token)
-
-        } catch (e) {
-            dispatch(setError(e.response.data.error))
-        }
+        UserPool.signUp(email, password, [], null, (err, data) => {
+            if(err) {
+                console.log(err.message)
+                dispatch(setError(err.message))
+            } else {
+                dispatch(setError('You registered successfully'))
+            }
+        })
     }
 }
 
 export const logout = () => {
     return async dispatch => {
-        dispatch(setAuth(false))
-        localStorage.removeItem('token')
-    }
-}
+        const user = UserPool.getCurrentUser()
+        if(user) {
+            user.signOut()
 
-
-export const check = () => {
-    return async dispatch => {
-        try {
-            const {data} = await request.get('/check',{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-
-            localStorage.setItem('token', data.token)
-
-            dispatch(setAuth(true))
-
-        } catch (e) {
-            localStorage.removeItem('token')
             dispatch(setAuth(false))
             dispatch(setError(''))
             dispatch(removeAllCars())
             dispatch(removeAllUsers())
         }
     }
+}
+
+
+export const check = () => {
+    return async dispatch => {
+        dispatch(setError(''))
+            const user = UserPool.getCurrentUser()
+
+            if(user){
+                user.getSession((err, session) => {
+                    if(err) {
+                        console.log(err)
+                        dispatch(setAuth(false))
+                        dispatch(setError(err.message))
+                        dispatch(removeAllCars())
+                        dispatch(removeAllUsers())
+                    } else {
+                        dispatch(setError(''))
+                        dispatch(setAuth(true))
+                    }
+                })
+            }
+    }
+}
+
+
+export const forgotPassword = (email) => {
+
+    const user = new CognitoUser({
+        Username: email,
+        Pool: UserPool
+    })
+
+    console.log(user)
+
+    user.forgotPassword({
+        onSuccess: (data) => {
+            console.log('success', data)
+        },
+        onFailure: (err) => {
+            console.log('error', err)
+        },
+        inputVerificationCode: (data) => {
+            console.log('verification', data)
+        }
+    })
 }

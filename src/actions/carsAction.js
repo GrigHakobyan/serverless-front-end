@@ -5,11 +5,7 @@ import request from "../helpers/axios";
 export const getCars = () => {
     return async dispatch => {
         try {
-            const {data} = await request.get('/cars', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const {data} = await request.get('/cars')
 
             dispatch(setCars(data))
             dispatch(setError(''))
@@ -23,11 +19,7 @@ export const getCars = () => {
 export const getCarById = (carId) => {
     return async dispatch => {
         try {
-            const {data} = await request.get(`/car/${carId}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const {data} = await request.get(`/car/${carId}`)
 
             dispatch(setCar(data))
             dispatch(setError(''))
@@ -42,11 +34,7 @@ export const getCarById = (carId) => {
 export const getMyCars = () => {
     return async dispatch => {
         try {
-            const {data} = await request.get('/cars/user', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const {data} = await request.get('/cars/user')
 
             dispatch(setMyCars(data))
             dispatch(setError(''))
@@ -61,17 +49,14 @@ export const getMyCars = () => {
 export const createCar = (carName, carModel, myCars) => {
     return async dispatch => {
         try {
-            const {data} = await request.post('/car', {
-                carName, carModel
-            },{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            const {data} = await request.post('/car',{
+                carName,
+                carModel
             })
 
-            const updatedCars = myCars.push(data)
+            myCars.push(data)
 
-            dispatch(setMyCars(updatedCars))
+            dispatch(setMyCars(myCars))
             dispatch(setError(''))
 
         } catch (e) {
@@ -86,9 +71,6 @@ export const deleteCar = (carId, myCars) => {
     return async dispatch => {
         try {
             await request.delete('/car',{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
                 data: {
                     carId
                 }
@@ -111,10 +93,6 @@ export const updateCar = (carId, carName, carModel, myCars) => {
                     carId,
                     carName,
                     carModel
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
             })
 
 

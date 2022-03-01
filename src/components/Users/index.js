@@ -18,9 +18,9 @@ const Users = () => {
             {
                 users && users.map(user => <div
                     className='list-item'
-                    key={user.userId}
+                    key={user.Username}
                 >
-                    <Link to={`/user/${user.userId}`}>{user.username}</Link>
+                    <Link to={`/user/${user.Username}`}>{user.Attributes[1].Value}</Link>
                 </div>)
             }
         </div>

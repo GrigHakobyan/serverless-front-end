@@ -5,7 +5,7 @@ const REMOVE_ALL_USER = 'REMOVE_ALL_USER'
 
 const initState = {
     users: [],
-    user: {},
+    user: '',
     error: ''
 }
 

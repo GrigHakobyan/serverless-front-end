@@ -2,16 +2,13 @@ import {removeAllUsers, setError, setUser, setUsers} from "../reducers/usersRedu
 import request from "../helpers/axios";
 import {setAuth} from "../reducers/authReducer";
 import {removeAllCars} from "../reducers/carsReducer";
+import UserPool from "../helpers/cognito/userPool";
 
 
 export const getUsers = () => {
     return async dispatch => {
         try {
-            const {data} = await request.get('/users',{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const {data} = await request.get('/users')
 
             dispatch(setUsers(data))
             dispatch(setError(''))
@@ -25,11 +22,7 @@ export const getUsers = () => {
 export const getUserById = (userId) => {
     return async dispatch => {
         try {
-            const {data} = await request.get(`/user/${userId}`,{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+            const {data} = await request.get(`/user/${userId}`)
 
             dispatch(setUser(data))
             dispatch(setError(''))
@@ -42,29 +35,38 @@ export const getUserById = (userId) => {
 
 
 export const getProfile = async () => {
-        const {data} = await request.get('/profile', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+    let email
+    UserPool.getCurrentUser().getSession((err, session) => {
+        if(err){
+            console.log(err)
+        } else {
+            email = session.getIdToken().payload.email
+        }
+    })
 
-    return data
+    return email
 }
 
-export const updateUser = (username, email, password) => {
+export const updateUserPassword = (oldPassword, newPassword) => {
     return async dispatch => {
         try {
-            const {data} = await request.put('/user',
-                {
-                    username, email, password
-                },
-                {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+
+            const user = UserPool.getCurrentUser()
+            user.getSession((error, session) => {
+                if(error){
+                    console.log(error)
+                } else {
+                    user.changePassword(oldPassword, newPassword, (err,res) => {
+                        if(err){
+                            console.log(err)
+                        } else {
+                            console.log(res)
+                        }
+                    })
                 }
             })
 
-            dispatch(setUser(data))
+
             dispatch(setError(''))
 
         } catch (e) {
@@ -77,16 +79,24 @@ export const updateUser = (username, email, password) => {
 export const deleteProfile = () => {
     return async dispatch => {
         try {
-            await request.delete('/user', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            const user = UserPool.getCurrentUser()
+
+            user.getSession((error, session) => {
+                user.deleteUser((err, result) => {
+                    if(err) {
+                        console.log(err)
+                    } else {
+                        console.log(result)
+
+                        dispatch(setAuth(false))
+                        dispatch(removeAllCars())
+                        dispatch(removeAllUsers())
+                    }
+                })
             })
 
-            localStorage.removeItem('token')
-            dispatch(setAuth(false))
-            dispatch(removeAllCars())
-            dispatch(removeAllUsers())
+
+
         } catch (e) {
             dispatch(setError(e.response.data.error))
         }

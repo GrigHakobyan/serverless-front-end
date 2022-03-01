@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {registration} from "../../actions/authAction";
+import {setError} from "../../reducers/authReducer";
+import {Link, useNavigate} from "react-router-dom";
 
 const Registration = () => {
-    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
 
@@ -11,9 +12,16 @@ const Registration = () => {
 
     const {error} = useSelector(state => state.authReducer)
 
+    const navigate = useNavigate()
+
+
     const onRegistrationHandler = () => {
-        dispatch(registration(username, email, password))
+        dispatch(registration(email, password))
     }
+
+    useEffect(() => {
+        dispatch(setError(''))
+    }, [])
 
 
     return (
@@ -22,16 +30,15 @@ const Registration = () => {
 
             <p className='error'>{error}</p>
 
-            <label>Username</label>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text"/>
-
             <label>Email</label>
             <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
 
             <label>Password</label>
             <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
-
-            <button className='btn btn-success' onClick={onRegistrationHandler}>Registration</button>
+            <div className='flex-row'>
+                <Link to='/login'>Login</Link>
+                <button className='btn auth-btn' onClick={onRegistrationHandler}>Registration</button>
+            </div>
         </div>
     );
 };
