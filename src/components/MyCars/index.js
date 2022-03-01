@@ -30,8 +30,10 @@ const MyCars = () => {
     }
 
 
-    const onAddHandler = () => {
-        dispatch(createCar(carName, carModel, myCars))
+    const onAddHandler = async (e) => {
+        e.preventDefault()
+
+        await dispatch(createCar(carName, carModel, myCars))
 
         if(!error) {
             setCarName('')
@@ -48,9 +50,10 @@ const MyCars = () => {
         }
     }
 
-    const onUpdateHandler = () => {
-        dispatch(updateCar(carId,carName, carModel, myCars))
+    const onUpdateHandler = async (e) => {
+        e.preventDefault()
 
+        await dispatch(updateCar(carId,carName, carModel, myCars))
 
         if(!error) {
             setCarId('')
@@ -96,15 +99,19 @@ const MyCars = () => {
 
 
             <Modal error={error} show={createModal} close={toggleCreateModal} header='ADD NEW CAR'>
-                <input value={carName} onChange={(e) => setCarName(e.target.value)} type="text"/><br/>
-                <input value={carModel} onChange={(e) => setCarModel(e.target.value)} type="text"/><br/>
-                <button onClick={onAddHandler}>Add Car</button>
+                <form className='content' onSubmit={onAddHandler}>
+                    <input value={carName} onChange={(e) => setCarName(e.target.value)} type="text"/><br/>
+                    <input value={carModel} onChange={(e) => setCarModel(e.target.value)} type="text"/><br/>
+                    <button className='btn btn-success'>Add Car</button>
+                </form>
             </Modal>
 
             <Modal error={error} show={updateModal} close={toggleUpdateModal} header='UPDATE CAR'>
-                <input value={carName} onChange={(e) => setCarName(e.target.value)} type="text"/><br/>
-                <input value={carModel} onChange={(e) => setCarModel(e.target.value)} type="text"/><br/>
-                <button onClick={onUpdateHandler}>Update Car</button>
+                <form className='content' onSubmit={onUpdateHandler}>
+                    <input value={carName} onChange={(e) => setCarName(e.target.value)} type="text"/><br/>
+                    <input value={carModel} onChange={(e) => setCarModel(e.target.value)} type="text"/><br/>
+                    <button className='btn btn-success'>Update Car</button>
+                </form>
             </Modal>
         </div>
     );

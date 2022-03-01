@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "serverlessfrontendc3140aa3": {
+      "service": "Cognito",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-serverlessfrontend-dev-160040-authRole",
+      "UnauthRoleArn": "arn:aws:iam::025209864985:role/amplify-serverlessfrontend-dev-160040-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::025209864985:role/amplify-serverlessfrontend-dev-160040-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-serverlessfrontend-dev-160040-deployment",
+      "UnauthRoleName": "amplify-serverlessfrontend-dev-160040-unauthRole",
+      "StackName": "amplify-serverlessfrontend-dev-160040",
+      "StackId": "arn:aws:cloudformation:eu-central-1:025209864985:stack/amplify-serverlessfrontend-dev-160040/3c1f2000-9957-11ec-9d02-06b699dac654",
+      "AmplifyAppId": "d26yky7kayxy4g"
+    },
+    "categories": {
+      "auth": {
+        "serverlessfrontendc3140aa3": {
+          "userPoolId": "eu-central-1_0657elRnn",
+          "userPoolName": "lambda-test-service-Cognito-Users-Pool-dev",
+          "webClientId": "2sea9hfu7t8c3d4v1buinl800a",
+          "nativeClientId": "2sea9hfu7t8c3d4v1buinl800a"
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import {removeAllUsers, setError, setUser, setUsers} from "../reducers/usersRedu
 import request from "../helpers/axios";
 import {setAuth} from "../reducers/authReducer";
 import {removeAllCars} from "../reducers/carsReducer";
-import UserPool from "../helpers/cognito/userPool";
+import {Auth} from "aws-amplify";
 
 
 export const getUsers = () => {
@@ -35,37 +35,26 @@ export const getUserById = (userId) => {
 
 
 export const getProfile = async () => {
-    let email
-    UserPool.getCurrentUser().getSession((err, session) => {
-        if(err){
-            console.log(err)
-        } else {
-            email = session.getIdToken().payload.email
-        }
-    })
+    const user = await Auth.currentAuthenticatedUser()
 
-    return email
+    const email = user?.signInUserSession?.idToken?.payload['email']
+    const first_name = user?.signInUserSession?.idToken?.payload['custom:first_name']
+    const last_name = user?.signInUserSession?.idToken?.payload['custom:last_name']
+
+    return {
+        email,
+        first_name,
+        last_name
+    }
 }
 
 export const updateUserPassword = (oldPassword, newPassword) => {
     return async dispatch => {
         try {
 
-            const user = UserPool.getCurrentUser()
-            user.getSession((error, session) => {
-                if(error){
-                    console.log(error)
-                } else {
-                    user.changePassword(oldPassword, newPassword, (err,res) => {
-                        if(err){
-                            console.log(err)
-                        } else {
-                            console.log(res)
-                        }
-                    })
-                }
-            })
+            const user = await Auth.currentAuthenticatedUser()
 
+            await Auth.changePassword(user,oldPassword, newPassword)
 
             dispatch(setError(''))
 
@@ -79,33 +68,24 @@ export const updateUserPassword = (oldPassword, newPassword) => {
 export const deleteProfile = (myCars) => {
     return async dispatch => {
         try {
-            const user = UserPool.getCurrentUser()
+            if(myCars.length > 0) {
+                const carsId = myCars.map(car => car.id)
 
-            const carsId = myCars.map(car => car.id)
-
-            await request.delete('/deleteCars',{
-                data: {
-                    carsId: carsId
-                }
-            })
-
-            user.getSession((error, session) => {
-                user.deleteUser((err, result) => {
-                    if(err) {
-                        console.log(err)
-                    } else {
-                        console.log(result)
-
-                        dispatch(setAuth(false))
-                        dispatch(removeAllCars())
-                        dispatch(removeAllUsers())
+                await request.delete('/deleteCars',{
+                    data: {
+                        carsId: carsId
                     }
                 })
-            })
+            }
 
+            await Auth.deleteUser()
 
+            dispatch(setAuth(false))
+            dispatch(removeAllCars())
+            dispatch(removeAllUsers())
 
         } catch (e) {
+            console.log(e)
             dispatch(setError(e.response.data.error))
         }
     }

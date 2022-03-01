@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import {useDispatch, useSelector} from "react-redux";
-import {Routes, Route, Navigate, Redirect} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Users from "./components/Users";
@@ -11,9 +11,8 @@ import MyCars from "./components/MyCars";
 import Car from "./components/Car";
 import {useEffect} from "react";
 import {check} from "./actions/authAction";
-import UserPool from "./helpers/cognito/userPool";
-import {setAuth} from "./reducers/authReducer";
 import ForgotPassword from "./components/ForgotPassword";
+import ConfirmSignUp from "./components/ConfirmVerifyCode";
 
 function App() {
     const {isAuth} = useSelector(state => state.authReducer)
@@ -33,6 +32,7 @@ function App() {
                         <>
                             <Route path='/login' element={ <Login /> }/>
                             <Route path='/registration' element={ <Registration /> }/>
+                            <Route path='/confirm' element={ <ConfirmSignUp /> }/>
                             <Route path='/forgotpassword' element={<ForgotPassword />} />
                         </>
                         :

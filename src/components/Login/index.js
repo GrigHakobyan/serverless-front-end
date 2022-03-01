@@ -14,7 +14,9 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const onLoginHandler = () => {
+    const onLoginHandler = (e) => {
+        e.preventDefault()
+
         dispatch(login(email, password))
     }
 
@@ -32,19 +34,22 @@ const Login = () => {
 
             <p className='error'>{error}</p>
 
-            <label>Email</label>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+            <form className='content' onSubmit={onLoginHandler}>
 
-            <label>Password</label>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+                <label>Email</label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
 
-            <div className='flex-row'>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                    <Link to='/forgotpassword'>Forgot password?</Link>
-                    <Link to='/registration'>Registration</Link>
+                <label>Password</label>
+                <input value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
+
+                <div className='flex-row'>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <Link to='/forgotpassword'>Forgot password?</Link>
+                        <Link to='/registration'>Registration</Link>
+                    </div>
+                    <button className='btn auth-btn'>Login</button>
                 </div>
-                <button className='btn auth-btn' onClick={onLoginHandler}>Login</button>
-            </div>
+            </form>
         </div>
     );
 };

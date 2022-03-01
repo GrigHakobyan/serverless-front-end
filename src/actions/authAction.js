@@ -1,73 +1,80 @@
-import {setAuth, setError} from "../reducers/authReducer";
+import {setAuth, setEmail, setError} from "../reducers/authReducer";
 import {removeAllCars} from "../reducers/carsReducer";
 import {removeAllUsers} from "../reducers/usersReducer";
-import UserPool from "../helpers/cognito/userPool";
-import {AuthenticationDetails, CognitoUser} from "amazon-cognito-identity-js";
+import {Auth} from "aws-amplify";
+
 
 
 export const login = (email, password) => {
     return async dispatch => {
         dispatch(setError(''))
 
-            const user = new CognitoUser({
-                Username: email,
-                Pool: UserPool
-            })
+        try {
+            await Auth.signIn(email, password)
 
-            const authDetails = new AuthenticationDetails({
-                Username: email,
-                Password: password
-            })
+            dispatch(setError(''))
+            dispatch(setAuth(true))
 
-            user.authenticateUser(authDetails,{
-                onSuccess: (data) => {
-                    console.log(data)
-                    dispatch(setError(''))
-                    dispatch(setAuth(true))
-                },
-                onFailure: (err) => {
-                    if(err) {
-                        console.log(err.message)
-                        dispatch(setError(err.message))
-                    } else {
-                        dispatch(setError(''))
-                    }
-                },
-                newPasswordRequired: (data) => {
-                    console.log('New password required', data)
-                    dispatch(setError(''))
-                    dispatch(setAuth(true))
+        } catch (e) {
+            dispatch(setError(e.message))
+        }
+    }
+}
+
+
+export const registration = (email, password, fname, lname) => {
+    return async dispatch => {
+        try {
+            await Auth.signUp({
+                username: email,
+                password,
+                attributes: {
+                    'custom:first_name': fname,
+                    'custom:last_name': lname
                 }
             })
 
+            dispatch(setError(''))
+            dispatch(setEmail(email))
+        } catch (e) {
+            dispatch(setError(e.message))
+        }
     }
 }
 
 
-export const registration = (email, password) => {
+export const verifyCode = (type,email, code,newPassword) => {
     return async dispatch => {
-
-        UserPool.signUp(email, password, [], null, (err, data) => {
-            if(err) {
-                console.log(err.message)
-                dispatch(setError(err.message))
-            } else {
-                dispatch(setError('You registered successfully'))
+        try {
+            if(type === 'ConfirmSignUp') {
+                await Auth.confirmSignUp(email, code)
+            } else if(type === 'ForgotPasswordSubmit') {
+                await Auth.forgotPasswordSubmit(email,code,newPassword)
             }
-        })
+
+
+            dispatch(setError(''))
+            dispatch(setEmail(''))
+        } catch (e) {
+            console.log(e)
+            dispatch(setError(e.message))
+        }
     }
 }
+
 
 export const logout = () => {
     return async dispatch => {
-        const user = UserPool.getCurrentUser()
-        if(user) {
-            user.signOut()
+        try {
+            await Auth.signOut()
 
             dispatch(setAuth(false))
             dispatch(setError(''))
             dispatch(removeAllCars())
             dispatch(removeAllUsers())
+
+        } catch (e) {
+            dispatch(setError(e.message))
         }
     }
 }
@@ -76,44 +83,34 @@ export const logout = () => {
 export const check = () => {
     return async dispatch => {
         dispatch(setError(''))
-            const user = UserPool.getCurrentUser()
 
-            if(user){
-                user.getSession((err, session) => {
-                    if(err) {
-                        console.log(err)
-                        dispatch(setAuth(false))
-                        dispatch(setError(err.message))
-                        dispatch(removeAllCars())
-                        dispatch(removeAllUsers())
-                    } else {
-                        dispatch(setError(''))
-                        dispatch(setAuth(true))
-                    }
-                })
+        try {
+            const session = (await Auth.currentSession())
+
+            if(session) {
+                dispatch(setError(''))
+                dispatch(setAuth(true))
             }
+
+        } catch (e) {
+            dispatch(setAuth(false))
+            dispatch(setError(e.message))
+            dispatch(removeAllCars())
+            dispatch(removeAllUsers())
+        }
     }
 }
 
 
 export const forgotPassword = (email) => {
+    return async dispatch => {
+        try {
+            await Auth.forgotPassword(email)
 
-    const user = new CognitoUser({
-        Username: email,
-        Pool: UserPool
-    })
-
-    console.log(user)
-
-    user.forgotPassword({
-        onSuccess: (data) => {
-            console.log('success', data)
-        },
-        onFailure: (err) => {
-            console.log('error', err)
-        },
-        inputVerificationCode: (data) => {
-            console.log('verification', data)
+            dispatch(setError(''))
+            dispatch(setEmail(email))
+        } catch (e) {
+            dispatch(setError(e.message))
         }
-    })
+    }
 }

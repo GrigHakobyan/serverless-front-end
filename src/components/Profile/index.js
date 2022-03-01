@@ -5,6 +5,10 @@ import {useNavigate} from "react-router-dom";
 
 const Profile = () => {
     const [email, setEmail] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+
+
     const [password, setPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
 
@@ -15,8 +19,10 @@ const Profile = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        getProfile().then(email => {
+        getProfile().then(({email, first_name,last_name}) => {
             setEmail(email)
+            setFirstName(first_name)
+            setLastName(last_name)
         })
     }, [])
 
@@ -37,6 +43,8 @@ const Profile = () => {
             <p className='error'>{error}</p>
 
             <input disabled value={email} onChange={(e) => setEmail(e.target.value)} type="text"/>
+            <input disabled value={firstName} onChange={(e) => setEmail(e.target.value)} type="text"/>
+            <input disabled value={lastName} onChange={(e) => setEmail(e.target.value)} type="text"/>
 
             <input placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} type="text"/>
             <input placeholder='New password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} type="text"/>
