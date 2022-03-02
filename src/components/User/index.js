@@ -12,7 +12,7 @@ const User = () => {
     const {error, user, users} = useSelector(state => state.usersReducer)
 
     useEffect(() => {
-        const foundUser = users?.find(user => user.Username === userId)
+        const foundUser = users?.find(user => user.sub === userId)
 
         if(foundUser) {
             setFindUser(foundUser)
@@ -31,11 +31,19 @@ const User = () => {
                     :
                     findUser ?
                         <>
-                            <h2>{findUser?.Attributes[1].Value}</h2>
+                            <h2>{findUser.email}</h2>
+                            <div className='content'>
+                                <p>First Name: {findUser['custom:first_name'] ?? 'N/A'}</p>
+                                <p>Last Name: {findUser['custom:last_name']  ?? 'N/A'}</p>
+                            </div>
                         </>
                         :
                         <>
-                        <h2>{user && user?.Attributes?.[2].Value}</h2>
+                            <h2>{user && user.email}</h2>
+                            <div className='content'>
+                                <p>First Name: {user['custom:first_name']  ?? 'N/A'}</p>
+                                <p>Last Name: {user['custom:last_name']  ?? 'N/A'}</p>
+                            </div>
                         </>
             }
         </div>

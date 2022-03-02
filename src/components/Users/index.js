@@ -11,6 +11,7 @@ const Users = () => {
             dispatch(getUsers())
     }, [])
 
+
     return (
         <div className='list'>
             <h2 style={{margin: 'auto'}}>Users</h2>
@@ -18,9 +19,9 @@ const Users = () => {
             {
                 users && users.map(user => <div
                     className='list-item'
-                    key={user.Username}
+                    key={user.sub}
                 >
-                    <Link to={`/user/${user.Username}`}>{user.Attributes[1].Value}</Link>
+                    <Link to={`/user/${user.sub}`}>{user.email}</Link>
                 </div>)
             }
         </div>

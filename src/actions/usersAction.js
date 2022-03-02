@@ -10,10 +10,18 @@ export const getUsers = () => {
         try {
             const {data} = await request.get('/users')
 
-            dispatch(setUsers(data))
+            const users = data.map(user => {
+                return user.Attributes.reduce((acc,data) => {
+                    acc[data.Name] = data.Value
+                    return acc
+                },{})
+            })
+
+            dispatch(setUsers(users))
             dispatch(setError(''))
 
         } catch (e) {
+            console.log(e.message)
             dispatch(setError(e.response.data.error))
         }
     }
@@ -24,7 +32,12 @@ export const getUserById = (userId) => {
         try {
             const {data} = await request.get(`/user/${userId}`)
 
-            dispatch(setUser(data))
+            const user = data.Attributes.reduce((acc,data) => {
+                acc[data.Name] = data.Value
+                return acc
+            },{})
+
+            dispatch(setUser(user))
             dispatch(setError(''))
 
         } catch (e) {
